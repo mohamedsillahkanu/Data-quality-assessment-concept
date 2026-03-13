@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DQA Concepts & Mathematics — ICF-SL</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+:root {
+  --navy: #004080;
+  --navy-dark: #002d5a;
+  --navy-light: #005ab3;
+  --gold: #e8a020;
+  --gold-light: #ffd166;
+  --green: #1a7a4a;
+  --green-light: #d4f0e3;
+  --red: #c0392b;
+  --red-light: #fde8e6;
+  --purple: #6b3fa0;
+  --purple-light: #ede5f8;
+  --teal: #0f7b8a;
+  --teal-light: #d4f3f7;
+  --bg: #f5f7fa;
+  --white: #ffffff;
+  --text: #1a1a2e;
+  --text-muted: #556080;
+  --border: #ccd6e8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); font-family: 'Oswald', sans-serif; color: var(--text); }
+
+/* HEADER */
+.page-header {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, var(--navy-light) 100%);
+  padding: 40px 40px 50px;
+  position: relative; overflow: hidden;
+}
+.page-header::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px);
+}
+.header-inner { max-width: 1140px; margin: 0 auto; position: relative; z-index: 1; }
+.logo-row { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; }
+.logo-box { background: white; border-radius: 10px; padding: 8px; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.logo-box img { width: 64px; height: auto; border-radius: 6px; }
+.logo-text { color: white; }
+.logo-text .org { font-size: 13px; font-weight: 600; letter-spacing: 1px; opacity: 0.9; }
+.logo-text .tagline { font-size: 11px; font-weight: 300; opacity: 0.7; font-style: italic; }
+.header-title { color: white; font-size: 34px; font-weight: 700; letter-spacing: 1.5px; line-height: 1.1; }
+.header-title span { color: var(--gold-light); }
+.header-sub { color: rgba(255,255,255,0.8); font-size: 15px; font-weight: 400; margin-top: 10px; font-family: 'Source Serif 4', serif; font-style: italic; }
+.header-badges { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+.badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; letter-spacing: 0.5px; }
+
+/* NAV TABS */
+.nav-wrapper { background: var(--navy-dark); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
+.nav-tabs { max-width: 1140px; margin: 0 auto; display: flex; overflow-x: auto; scrollbar-width: none; }
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-tab { color: rgba(255,255,255,0.6); padding: 16px 22px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; text-transform: uppercase; }
+.nav-tab:hover { color: white; background: rgba(255,255,255,0.07); }
+.nav-tab.active { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+
+/* MAIN LAYOUT */
+.main { max-width: 1140px; margin: 0 auto; padding: 30px 20px 60px; }
+
+/* SECTIONS */
+.section { display: none; }
+.section.active { display: block; }
+
+/* SECTION HEADER */
+.sec-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 3px solid var(--navy); }
+.sec-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.sec-icon.navy { background: var(--navy); color: white; }
+.sec-icon.gold { background: var(--gold); color: white; }
+.sec-icon.green { background: var(--green); color: white; }
+.sec-icon.red { background: var(--red); color: white; }
+.sec-icon.purple { background: var(--purple); color: white; }
+.sec-icon.teal { background: var(--teal); color: white; }
+.sec-header-text h2 { font-size: 22px; font-weight: 700; color: var(--navy); letter-spacing: 0.5px; }
+.sec-header-text p { font-size: 13px; color: var(--text-muted); font-family: 'Source Serif 4', serif; margin-top: 4px; }
+
+/* CARDS */
+.card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.card-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid var(--navy); display: flex; align-items: center; gap: 8px; }
+.card-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.card-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.card-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+/* DIMENSION CARDS */
+.dim-card { border-radius: 12px; padding: 20px; border: 2px solid; position: relative; overflow: hidden; }
+.dim-card::before { content: ''; position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; border-radius: 50%; opacity: 0.08; }
+.dim-card.d1 { border-color: var(--navy); background: #f0f5ff; }
+.dim-card.d1::before { background: var(--navy); }
+.dim-card.d2 { border-color: var(--green); background: var(--green-light); }
+.dim-card.d2::before { background: var(--green); }
+.dim-card.d3 { border-color: var(--gold); background: #fff8e6; }
+.dim-card.d3::before { background: var(--gold); }
+.dim-card.d4 { border-color: var(--red); background: var(--red-light); }
+.dim-card.d4::before { background: var(--red); }
+.dim-card .num { font-size: 42px; font-weight: 700; opacity: 0.15; position: absolute; top: 10px; right: 16px; }
+.dim-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.dim-card.d1 h3 { color: var(--navy); }
+.dim-card.d2 h3 { color: var(--green); }
+.dim-card.d3 h3 { color: var(--gold); }
+.dim-card.d4 h3 { color: var(--red); }
+.dim-card .pts { font-size: 28px; font-weight: 700; margin: 8px 0; }
+.dim-card.d1 .pts { color: var(--navy); }
+.dim-card.d2 .pts { color: var(--green); }
+.dim-card.d3 .pts { color: var(--gold); }
+.dim-card.d4 .pts { color: var(--red); }
+.dim-card p { font-size: 13px; color: var(--text-muted); font-family: 'Source Serif 4', serif; line-height: 1.6; }
+
+/* FORMULA BOXES */
+.formula-block { background: linear-gradient(135deg, #f0f5ff, #e8f0fe); border: 2px solid var(--navy); border-radius: 12px; padding: 24px; margin: 16px 0; text-align: center; }
+.formula-block h4 { color: var(--navy); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
+.formula { font-family: 'Source Serif 4', serif; font-size: 24px; background: white; border: 1px solid var(--navy); border-radius: 8px; padding: 16px 24px; display: inline-block; color: var(--text); margin: 8px 0; }
+.formula sub, .formula sup { font-size: 14px; }
+.formula-note { font-size: 12px; color: var(--text-muted); margin-top: 12px; font-family: 'Source Serif 4', serif; font-style: italic; }
+
+/* STEP-BY-STEP */
+.steps { counter-reset: step; }
+.step { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
+.step-num { counter-increment: step; width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: white; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.step-body { flex: 1; }
+.step-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.step-content { font-size: 13px; font-family: 'Source Serif 4', serif; line-height: 1.7; color: var(--text); }
+.step-calc { background: #f0f5ff; border-left: 4px solid var(--navy); padding: 12px 16px; border-radius: 0 8px 8px 0; margin-top: 8px; font-family: 'Source Serif 4', serif; font-size: 13px; }
+.step-calc .eq { font-size: 15px; font-weight: 600; color: var(--navy); }
+
+/* TABLES */
+.concept-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+.concept-table th { background: var(--navy); color: white; padding: 10px 14px; text-align: center; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.concept-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); text-align: center; }
+.concept-table tr:nth-child(even) td { background: #f8f9fc; }
+.concept-table td.label { text-align: left; font-weight: 600; }
+.concept-table .total-row td { background: #e7f0ff; font-weight: 700; border-top: 2px solid var(--navy); }
+.concept-table .highlight td { background: #fff3cd; }
+.concept-table .bad td { background: #fde8e6; }
+.concept-table .good td { background: var(--green-light); }
+
+/* SCORE METER */
+.score-meter { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+.score-meter .score-val { font-size: 52px; font-weight: 700; }
+.score-meter .score-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+.score-bar-wrap { margin: 16px 0; }
+.score-bar-bg { background: #e9ecef; border-radius: 20px; height: 20px; overflow: hidden; }
+.score-bar-fill { height: 100%; border-radius: 20px; transition: width 1s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
+.score-bar-fill span { font-size: 11px; font-weight: 700; color: white; }
+.priority-badge { display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-top: 8px; }
+.priority-high { background: var(--red); color: white; }
+.priority-medium { background: var(--gold); color: white; }
+.priority-low { background: var(--green); color: white; }
+
+/* MINI STAT CARDS */
+.mini-stat { background: white; border: 2px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+.mini-stat .val { font-size: 28px; font-weight: 700; }
+.mini-stat .lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+.mini-stat .sub { font-size: 12px; font-family: 'Source Serif 4', serif; color: var(--text-muted); margin-top: 4px; }
+
+/* CALLOUT BOXES */
+.callout { border-radius: 10px; padding: 16px 20px; margin: 14px 0; display: flex; gap: 14px; align-items: flex-start; }
+.callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.callout-body strong { font-size: 14px; display: block; margin-bottom: 4px; }
+.callout-body p { font-size: 13px; font-family: 'Source Serif 4', serif; line-height: 1.6; }
+.callout.info { background: #e7f3ff; border: 2px solid var(--navy); }
+.callout.info strong { color: var(--navy); }
+.callout.success { background: var(--green-light); border: 2px solid var(--green); }
+.callout.success strong { color: var(--green); }
+.callout.warning { background: #fff8e6; border: 2px solid var(--gold); }
+.callout.warning strong { color: var(--gold); }
+.callout.danger { background: var(--red-light); border: 2px solid var(--red); }
+.callout.danger strong { color: var(--red); }
+
+/* SCENARIO TABS */
+.scenario-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+.scenario-tab { padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; border: 2px solid var(--border); background: white; color: var(--text-muted); transition: all 0.2s; }
+.scenario-tab.active { background: var(--navy); color: white; border-color: var(--navy); }
+.scenario-content { display: none; }
+.scenario-content.active { display: block; }
+
+/* IQR VISUAL */
+.iqr-row { display: flex; align-items: stretch; gap: 0; margin: 16px 0; border: 2px solid var(--border); border-radius: 10px; overflow: hidden; }
+.iqr-zone { padding: 14px 10px; text-align: center; flex: 1; }
+.iqr-zone .zone-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.iqr-zone .zone-range { font-size: 13px; font-family: 'Source Serif 4', serif; margin-top: 4px; }
+.iqr-zone.low-out { background: var(--red-light); border-right: 2px dashed var(--red); }
+.iqr-zone.normal { background: var(--green-light); flex: 2; }
+.iqr-zone.high-out { background: var(--red-light); border-left: 2px dashed var(--red); }
+
+/* COHERENCY VISUAL */
+.coh-check { background: white; border: 2px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+.coh-check.fail { border-color: var(--red); background: var(--red-light); }
+.coh-check.pass { border-color: var(--green); background: var(--green-light); }
+.coh-check-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.coh-rule { font-size: 14px; font-weight: 700; color: var(--navy); }
+.coh-badge { padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+.coh-badge.pass { background: var(--green); color: white; }
+.coh-badge.fail { background: var(--red); color: white; }
+.coh-detail { font-size: 12px; font-family: 'Source Serif 4', serif; color: var(--text); }
+
+/* PROGRESS TABS */
+.dim-section { margin-bottom: 32px; }
+.dim-header { display: flex; align-items: center; justify-content: space-between; background: var(--navy); color: white; padding: 14px 20px; border-radius: 10px 10px 0 0; cursor: pointer; }
+.dim-header h3 { font-size: 15px; font-weight: 700; }
+.dim-header .pts-chip { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px; font-size: 13px; }
+.dim-body { background: white; border: 2px solid var(--navy); border-top: none; border-radius: 0 0 10px 10px; padding: 24px; }
+.dim-body.d2 { border-color: var(--green); }
+.dim-header.d2 { background: var(--green); }
+.dim-body.d3 { border-color: var(--gold); }
+.dim-header.d3 { background: var(--gold); }
+.dim-body.d4 { border-color: var(--red); }
+.dim-header.d4 { background: var(--red); }
+
+/* CHART containers */
+.chart-wrap { border: 2px solid var(--border); border-radius: 10px; overflow: hidden; margin: 16px 0; background: white; }
+
+/* FOOTER */
+.page-footer { background: var(--navy-dark); color: rgba(255,255,255,0.7); text-align: center; padding: 24px; font-size: 12px; }
+.page-footer strong { color: white; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .card-grid-2, .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
+  .header-title { font-size: 24px; }
+}
+
+/* Animate-in */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.section.active > * { animation: fadeUp 0.35s ease both; }
+.section.active > *:nth-child(2) { animation-delay: 0.05s; }
+.section.active > *:nth-child(3) { animation-delay: 0.10s; }
+.section.active > *:nth-child(4) { animation-delay: 0.15s; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="header-inner">
+    <div class="logo-row">
+      <div class="logo-box">
+        <img src="https://github.com/mohamedsillahkanu/gdp-dashboard-2/raw/6c7463b0d5c3be150aafae695a4bcbbd8aeb1499/ICF-SL.jpg" alt="ICF-SL">
+      </div>
+      <div class="logo-text">
+        <div class="org">Informatics Consultancy Firm — Sierra Leone (ICF-SL)</div>
+        <div class="tagline">Driving Data-Driven Solutions for Health and Development</div>
+      </div>
+    </div>
+    <div class="header-title">DATA QUALITY ASSESSMENT<br><span>Concepts, Mathematics & Worked Examples</span></div>
+    <div class="header-sub">An interactive learning guide before you start your analysis</div>
+    <div class="header-badges">
+      <span class="badge">📐 Formulas</span>
+      <span class="badge">🔢 Step-by-Step Calculations</span>
+      <span class="badge">📊 Visualizations</span>
+      <span class="badge">📋 2 Case Scenarios</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-wrapper">
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="switchTab('overview')">Overview</div>
+    <div class="nav-tab" onclick="switchTab('reporting')">① Reporting Rate</div>
+    <div class="nav-tab" onclick="switchTab('coherency')">② Coherency</div>
+    <div class="nav-tab" onclick="switchTab('indicators')">③ Indicators</div>
+    <div class="nav-tab" onclick="switchTab('outliers')">④ Outliers</div>
+    <div class="nav-tab" onclick="switchTab('scoring')">Scoring</div>
+    <div class="nav-tab" onclick="switchTab('scenarios')">Case Scenarios</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ============================================================ OVERVIEW ============================================================ -->
+<div id="tab-overview" class="section active">
+  <div class="sec-header">
+    <div class="sec-icon navy">📋</div>
+    <div class="sec-header-text">
+      <h2>What is Data Quality Assessment (DQA)?</h2>
+      <p>Understanding the four dimensions and why they matter for health data</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 Purpose of DQA</div>
+    <p style="font-family:'Source Serif 4',serif;font-size:14px;line-height:1.8;color:var(--text);">
+      Data Quality Assessment (DQA) is a systematic process to evaluate the reliability, accuracy, and completeness of health facility data — particularly routine malaria surveillance data reported into DHIS2. Before any analysis or decision-making, we must verify that the data <em>can actually be trusted</em>. DQA produces a numeric score (0–100) across four dimensions, identifies facilities with poor data quality, and flags specific issues that need correction.
+    </p>
+  </div>
+
+  <div class="card-grid-4" style="margin-bottom:20px;">
+    <div class="dim-card d1">
+      <div class="num">①</div>
+      <h3>Reporting Rate</h3>
+      <div class="pts">25 pts</div>
+      <p>Did facilities actually submit data each month? Measures completeness of reporting over time.</p>
+    </div>
+    <div class="dim-card d2">
+      <div class="num">②</div>
+      <h3>Coherency</h3>
+      <div class="pts">25 pts</div>
+      <p>Are the numbers logically consistent? E.g. confirmed cases cannot exceed tested cases.</p>
+    </div>
+    <div class="dim-card d3">
+      <div class="num">③</div>
+      <h3>Indicators</h3>
+      <div class="pts">25 pts</div>
+      <p>Are indicator values plausible? Checks for missing values, zeroes, and data type issues.</p>
+    </div>
+    <div class="dim-card d4">
+      <div class="num">④</div>
+      <h3>Outliers</h3>
+      <div class="pts">25 pts</div>
+      <p>Are there extreme values far outside the normal distribution for a facility and variable?</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔑 Key Terms You'll Encounter</div>
+    <table class="concept-table">
+      <thead>
+        <tr><th style="text-align:left">Term</th><th style="text-align:left">Definition</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="label">Observation</td><td style="text-align:left;font-family:'Source Serif 4',serif;">One data point from one facility for one month/year</td><td>Boajibu CHC, Jan 2024, Confirmed = 45</td></tr>
+        <tr><td class="label">Reporting Period</td><td style="text-align:left;font-family:'Source Serif 4',serif;">The expected number of data submissions (months × years)</td><td>12 months × 3 years = 36 expected submissions</td></tr>
+        <tr><td class="label">Contingency Table</td><td style="text-align:left;font-family:'Source Serif 4',serif;">Cross-tabulation of observed counts for two variables</td><td>Region × RDT Result</td></tr>
+        <tr><td class="label">IQR</td><td style="text-align:left;font-family:'Source Serif 4',serif;">Interquartile Range — the spread of the middle 50% of data</td><td>Q3 − Q1 = 80 − 20 = 60</td></tr>
+        <tr><td class="label">Outlier</td><td style="text-align:left;font-family:'Source Serif 4',serif;">A value more than 1.5 × IQR below Q1 or above Q3</td><td>A value of 250 when upper fence = 170</td></tr>
+        <tr><td class="label">Coherency Violation</td><td style="text-align:left;font-family:'Source Serif 4',serif;">When a logical rule between two variables is broken</td><td>Confirmed (120) > Tested (90) — impossible</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">💡</div>
+    <div class="callout-body">
+      <strong>How to use this guide</strong>
+      <p>Use the navigation tabs above to explore each dimension in depth. Each section explains the concept, shows the formula, walks through a manual calculation, and visualises the result. After reading all four, jump to <strong>Case Scenarios</strong> to see complete end-to-end DQA calculations for two real-world-style health facilities.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ REPORTING RATE ============================================================ -->
+<div id="tab-reporting" class="section">
+  <div class="sec-header">
+    <div class="sec-icon navy">①</div>
+    <div class="sec-header-text">
+      <h2>Dimension 1: Reporting Rate (Completeness)</h2>
+      <p>Did health facilities submit their data on time and for every expected period?</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📖 Concept</div>
+    <p style="font-family:'Source Serif 4',serif;font-size:14px;line-height:1.8;">
+      Reporting rate measures what fraction of expected data submissions were actually received. A facility that was supposed to report 12 months of data but only submitted 9 months has a reporting rate of 75%. Missing months create gaps in surveillance and undercount disease burden.
+    </p>
+    <div class="formula-block" style="margin-top:16px;">
+      <h4>Reporting Rate Formula</h4>
+      <div class="formula">Reporting Rate = (Months Reported / Expected Months) × 100%</div>
+      <div class="formula-note">Expected Months = Number of Years × 12 &nbsp;|&nbsp; Max score contribution: 25 pts</div>
+    </div>
+    <div class="formula-block">
+      <h4>DQA Reporting Score (out of 25)</h4>
+      <div class="formula">Score<sub>reporting</sub> = (Σ Months Reported / Σ Expected Months) × 25</div>
+      <div class="formula-note">Calculated across all facilities to produce a single aggregate score for the dataset</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔢 Worked Example — Step by Step</div>
+    <p style="font-family:'Source Serif 4',serif;font-size:13px;margin-bottom:16px;">Suppose we have 5 health facilities with data covering 3 years (2021–2023), so each facility is expected to report 36 months.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">List the facilities and their actual months reported</div>
+          <table class="concept-table" style="margin-top:10px;">
+            <thead><tr><th style="text-align:left">Facility</th><th>Expected Months</th><th>Months Reported</th><th>Reporting Rate</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr class="good"><td class="label">Koidu Government Hospital</td><td>36</td><td>36</td><td>100%</td><td>✅ Complete</td></tr>
+              <tr class="good"><td class="label">Makeni Regional Hospital</td><td>36</td><td>34</td><td>94.4%</td><td>✅ Good</td></tr>
+              <tr class="highlight"><td class="label">Boajibu CHC</td><td>36</td><td>28</td><td>77.8%</td><td>⚠️ Medium</td></tr>
+              <tr class="bad"><td class="label">Kailahun District Hospital</td><td>36</td><td>18</td><td>50.0%</td><td>❌ Poor</td></tr>
+              <tr class="good"><td class="label">Pujehun CHC</td><td>36</td><td>33</td><td>91.7%</td><td>✅ Good</td></tr>
+              <tr class="total-row"><td class="label">TOTAL</td><td>180</td><td>149</td><td>82.8%</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Calculate aggregate reporting rate</div>
+          <div class="step-calc">
+            <div class="eq">Aggregate Rate = 149 / 180 × 100% = <strong>82.8%</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Convert to DQA score (out of 25 points)</div>
+          <div class="step-calc">
+            <div class="eq">Score = (149 / 180) × 25 = 0.828 × 25 = <strong>20.7 / 25</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout warning">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <strong>Kailahun District Hospital is a concern</strong>
+        <p>Only 18 of 36 expected months were submitted (50%). This means 18 months of disease data are missing — cases during those months are completely invisible to surveillance. This facility requires immediate follow-up.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Reporting Rate Distribution</div>
+    <div class="chart-wrap" id="reportingChart" style="height:320px;"></div>
+  </div>
+</div>
+
+<!-- ============================================================ COHERENCY ============================================================ -->
+<div id="tab-coherency" class="section">
+  <div class="sec-header">
+    <div class="sec-icon" style="background:var(--green);color:white;">②</div>
+    <div class="sec-header-text">
+      <h2>Dimension 2: Coherency (Logical Consistency)</h2>
+      <p>Do the numbers make logical sense relative to each other?</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📖 Concept</div>
+    <p style="font-family:'Source Serif 4',serif;font-size:14px;line-height:1.8;">
+      Coherency checks test whether pairs of variables maintain logical relationships. In malaria surveillance, certain rules are medically impossible to violate. For example, you cannot confirm more malaria cases than you tested — that is biologically impossible. Each rule is tested across every facility-month combination. A facility-month that violates a rule is counted as a coherency failure.
+    </p>
+    <div class="formula-block" style="margin-top:16px;">
+      <h4>Coherency Score Formula</h4>
+      <div class="formula">Score<sub>coherency</sub> = (Checks Passed / Total Checks) × 25</div>
+      <div class="formula-note">Total Checks = Number of rules × Number of facility-month rows | Each row is tested against every coherency rule</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📏 The Four Standard Coherency Rules</div>
+    <div class="coh-check">
+      <div class="coh-check-header">
+        <div class="coh-rule">Rule 1: Confirmed ≤ Tested</div>
+        <span class="coh-badge pass">Medical Logic</span>
+      </div>
+      <div class="coh-detail">You cannot confirm more malaria cases than you actually tested. Confirmed = RDT/microscopy positive. Tested = total RDTs/microscopy performed. Violation: Confirmed = 120, Tested = 90 → impossible.</div>
+    </div>
+    <div class="coh-check">
+      <div class="coh-check-header">
+        <div class="coh-rule">Rule 2: Confirmed ≤ Suspected</div>
+        <span class="coh-badge pass">Clinical Logic</span>
+      </div>
+      <div class="coh-detail">Confirmed cases should be a subset of suspected cases (patients who presented with fever). In some reporting systems tested ≤ suspected also holds. Violation: Confirmed = 80, Suspected = 60.</div>
+    </div>
+    <div class="coh-check">
+      <div class="coh-check-header">
+        <div class="coh-rule">Rule 3: Tested ≤ Suspected (OPD)</div>
+        <span class="coh-badge pass">Process Logic</span>
+      </div>
+      <div class="coh-detail">You should only test patients who were first suspected (presented with fever to OPD). Testing more than suspected implies either a data entry error or extra screening being coded differently. Violation: Tested = 200, Suspected = 150.</div>
+    </div>
+    <div class="coh-check">
+      <div class="coh-check-header">
+        <div class="coh-rule">Rule 4: Treated ≤ Confirmed</div>
+        <span class="coh-badge pass">Treatment Logic</span>
+      </div>
+      <div class="coh-detail">Standard treatment protocols dictate that only confirmed malaria patients should receive ACT treatment. Treating more than confirmed implies presumptive treatment or data entry issues. Violation: Treated = 110, Confirmed = 95.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔢 Worked Example — Step by Step</div>
+    <p style="font-family:'Source Serif 4',serif;font-size:13px;margin-bottom:16px;">We test 3 coherency rules across 6 facility-month observations. Total checks = 3 rules × 6 rows = 18.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Raw data table (6 facility-month rows)</div>
+          <table class="concept-table" style="margin-top:10px;">
+            <thead><tr><th style="text-align:left">Facility / Month</th><th>Suspected</th><th>Tested</th><th>Confirmed</th><th>Treated</th></tr></thead>
+            <tbody>
+              <tr><td class="label">Koidu / Jan-24</td><td>150</td><td>140</td><td>85</td><td>82</td></tr>
+              <tr><td class="label">Koidu / Feb-24</td><td>130</td><td>125</td><td>70</td><td>70</td></tr>
+              <tr class="bad"><td class="label">Makeni / Jan-24</td><td>90</td><td>110</td><td>75</td><td>73</td></tr>
+              <tr class="bad"><td class="label">Makeni / Feb-24</td><td>100</td><td>95</td><td>105</td><td>90</td></tr>
+              <tr><td class="label">Boajibu / Jan-24</td><td>60</td><td>58</td><td>30</td><td>28</td></tr>
+              <tr class="bad"><td class="label">Boajibu / Feb-24</td><td>45</td><td>42</td><td>38</td><td>44</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Apply each rule to each row</div>
+          <table class="concept-table" style="margin-top:10px;">
+            <thead><tr><th style="text-align:left">Facility / Month</th><th>R1: Conf ≤ Tested</th><th>R2: Conf ≤ Suspected</th><th>R3: Tested ≤ Suspected</th><th>Passes</th></tr></thead>
+            <tbody>
+              <tr class="good"><td class="label">Koidu / Jan-24</td><td>✅ 85≤140</td><td>✅ 85≤150</td><td>✅ 140≤150</td><td>3/3</td></tr>
+              <tr class="good"><td class="label">Koidu / Feb-24</td><td>✅ 70≤125</td><td>✅ 70≤130</td><td>✅ 125≤130</td><td>3/3</td></tr>
+              <tr class="bad"><td class="label">Makeni / Jan-24</td><td>✅ 75≤110</td><td>✅ 75≤90</td><td>❌ 110&gt;90</td><td>2/3</td></tr>
+              <tr class="bad"><td class="label">Makeni / Feb-24</td><td>❌ 105&gt;95</td><td>❌ 105&gt;100</td><td>✅ 95≤100</td><td>1/3</td></tr>
+              <tr class="good"><td class="label">Boajibu / Jan-24</td><td>✅ 30≤58</td><td>✅ 30≤60</td><td>✅ 58≤60</td><td>3/3</td></tr>
+              <tr class="bad"><td class="label">Boajibu / Feb-24</td><td>✅ 38≤42</td><td>✅ 38≤45</td><td>✅ 42≤45</td><td>3/3</td></tr>
+              <tr class="total-row"><td class="label">TOTAL</td><td colspan="3" style="text-align:center;">15 passes out of 18 total checks</td><td>15/18</td></tr>
+            </tbody>
+          </table>
+          <div class="callout danger" style="margin-top:12px;">
+            <div class="callout-icon">❌</div>
+            <div class="callout-body">
+              <strong>Makeni Feb-24 has a critical data entry problem</strong>
+              <p>Confirmed (105) &gt; Tested (95) — this is biologically impossible. Also Confirmed (105) &gt; Suspected (100). This row should be investigated and corrected before any analysis.</p>
+            </div>
+          </div>
+          <div class="callout warning" style="margin-top:8px;">
+            <div class="callout-icon">⚠️</div>
+            <div class="callout-body">
+              <strong>Boajibu Feb-24 Treated issue (if we included Rule 4)</strong>
+              <p>Treated (44) &gt; Confirmed (38). This means 6 patients were treated for malaria without a confirmed diagnosis — possible presumptive treatment.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Calculate the coherency DQA score</div>
+          <div class="step-calc">
+            <div class="eq">Passes = 15 &nbsp;|&nbsp; Total Checks = 18</div>
+            <div class="eq" style="margin-top:8px;">Score = (15 / 18) × 25 = 0.833 × 25 = <strong>20.8 / 25</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Pass/Fail Breakdown by Rule</div>
+    <div class="chart-wrap" id="coherencyChart" style="height:320px;"></div>
+  </div>
+</div>
+
+<!-- ============================================================ INDICATORS ============================================================ -->
+<div id="tab-indicators" class="section">
+  <div class="sec-header">
+    <div class="sec-icon" style="background:var(--gold);color:white;">③</div>
+    <div class="sec-header-text">
+      <h2>Dimension 3: Indicator Consistency</h2>
+      <p>Are the reported values plausible — not missing, not zero when they shouldn't be, not wrong data types?</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📖 Concept</div>
+    <p style="font-family:'Source Serif 4',serif;font-size:14px;line-height:1.8;">
+      Indicator consistency checks verify that each data point for each selected variable is a usable, valid number. Three types of issues are detected: (1) <strong>Missing values</strong> — the cell is blank or null, (2) <strong>Inappropriate values</strong> — values that are negative, text strings, or otherwise non-numeric, (3) <strong>Unexpected zeros</strong> — a facility reported zero for a high-volume indicator in a month it did report (suggesting suppression or error rather than genuine zero disease burden).
+    </p>
+    <div class="formula-block" style="margin-top:16px;">
+      <h4>Indicator Score Formula</h4>
+      <div class="formula">Score<sub>indicator</sub> = ((Total Cells − Issues) / Total Cells) × 25</div>
+      <div class="formula-note">Total Cells = number of variables × number of facility-month rows | Issues = missing + inappropriate + unexpected zeros</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔍 The Three Issue Types</div>
+    <div class="card-grid-3">
+      <div class="dim-card" style="border-color:#6b3fa0;background:#ede5f8;">
+        <h3 style="color:#6b3fa0;">Missing Values</h3>
+        <div class="pts" style="color:#6b3fa0;">NULL / blank</div>
+        <p>Cell has no data at all. Happens when facility submits a form with some fields left empty. Cannot be used in any calculation.</p>
+      </div>
+      <div class="dim-card" style="border-color:var(--red);background:var(--red-light);">
+        <h3 style="color:var(--red);">Inappropriate Values</h3>
+        <div class="pts" style="color:var(--red);">−5, "N/A"</div>
+        <p>Negative numbers, text strings, or non-numeric entries. Impossible for count variables like confirmed cases or OPD attendance.</p>
+      </div>
+      <div class="dim-card" style="border-color:var(--gold);background:#fff8e6;">
+        <h3 style="color:var(--gold);">Unexpected Zeros</h3>
+        <div class="pts" style="color:var(--gold);">0 when active</div>
+        <p>Facility reported zero for a month it was active and submitting. For high-volume variables, genuine zeros are rare and suggest suppression or data entry error.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔢 Worked Example — Step by Step</div>
+    <p style="font-family:'Source Serif 4',serif;font-size:13px;margin-bottom:16px;">We check 3 variables (Tested, Confirmed, Treated) across 6 facility-month rows = 18 total cells.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Inspect each cell for issues</div>
+          <table class="concept-table" style="margin-top:10px;">
+            <thead><tr><th style="text-align:left">Facility / Month</th><th>Tested</th><th>Confirmed</th><th>Treated</th><th>Issues</th></tr></thead>
+            <tbody>
+              <tr><td class="label">Koidu / Jan-24</td><td>140</td><td>85</td><td>82</td><td>—</td></tr>
+              <tr class="bad"><td class="label">Koidu / Feb-24</td><td>—</td><td>70</td><td>70</td><td>❌ Missing: Tested</td></tr>
+              <tr><td class="label">Makeni / Jan-24</td><td>110</td><td>75</td><td>73</td><td>—</td></tr>
+              <tr class="bad"><td class="label">Makeni / Feb-24</td><td>95</td><td>−12</td><td>90</td><td>❌ Inappropriate: Confirmed</td></tr>
+              <tr class="highlight"><td class="label">Boajibu / Jan-24</td><td>58</td><td>0</td><td>28</td><td>⚠️ Unexpected Zero: Confirmed</td></tr>
+              <tr><td class="label">Boajibu / Feb-24</td><td>42</td><td>38</td><td>44</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Count the issues</div>
+          <div class="step-calc">
+            <div class="eq">Missing values: 1 (Koidu Feb-24 Tested)</div>
+            <div class="eq">Inappropriate values: 1 (Makeni Feb-24 Confirmed = −12)</div>
+            <div class="eq">Unexpected zeros: 1 (Boajibu Jan-24 Confirmed = 0, but facility was active and treated 28)</div>
+            <div class="eq" style="margin-top:8px;"><strong>Total Issues = 3 &nbsp;|&nbsp; Total Cells = 18</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Calculate indicator DQA score</div>
+          <div class="step-calc">
+            <div class="eq">Score = ((18 − 3) / 18) × 25 = (15 / 18) × 25 = 0.833 × 25 = <strong>20.8 / 25</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ OUTLIERS ============================================================ -->
+<div id="tab-outliers" class="section">
+  <div class="sec-header">
+    <div class="sec-icon" style="background:var(--red);color:white;">④</div>
+    <div class="sec-header-text">
+      <h2>Dimension 4: Outlier Detection</h2>
+      <p>Identifying values that are statistically extreme using the IQR (Interquartile Range) method</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📖 Concept: What is an Outlier?</div>
+    <p style="font-family:'Source Serif 4',serif;font-size:14px;line-height:1.8;">
+      An outlier is a data value that is so far from the typical distribution that it is likely the result of a data entry error, a transcription mistake, or a one-off exceptional event. In DQA we use the <strong>IQR (Interquartile Range)</strong> method — the same method used by box plots — to define upper and lower bounds. Any value outside those bounds is flagged as an outlier.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📐 The IQR Method — Step by Step</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Sort all values for a variable and find the quartiles</div>
+          <div class="step-content">Take all observed values for a given variable (e.g. "Confirmed Cases") across all facilities and months. Sort them from lowest to highest. Find the 25th percentile (Q1) and the 75th percentile (Q3).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Calculate the IQR and the fences</div>
+          <div class="formula-block" style="text-align:left;padding:16px;">
+            <div class="formula" style="font-size:18px;display:block;text-align:center;">IQR = Q3 − Q1</div>
+            <div class="formula" style="font-size:18px;display:block;text-align:center;margin-top:10px;">Lower Fence = Q1 − 1.5 × IQR</div>
+            <div class="formula" style="font-size:18px;display:block;text-align:center;margin-top:10px;">Upper Fence = Q3 + 1.5 × IQR</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Flag any value outside the fences</div>
+          <div class="step-content">If a value &lt; Lower Fence OR a value &gt; Upper Fence → it is an outlier. The lower fence is often negative (floored at 0 for count variables). The upper fence is the key threshold in health data.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="iqr-row">
+      <div class="iqr-zone low-out">
+        <div class="zone-label" style="color:var(--red);">❌ Low Outlier</div>
+        <div class="zone-range">Value &lt; Q1 − 1.5×IQR</div>
+      </div>
+      <div class="iqr-zone normal">
+        <div class="zone-label" style="color:var(--green);">✅ Normal Range</div>
+        <div class="zone-range">Q1 − 1.5×IQR &nbsp;≤&nbsp; Value &nbsp;≤&nbsp; Q3 + 1.5×IQR</div>
+      </div>
+      <div class="iqr-zone high-out">
+        <div class="zone-label" style="color:var(--red);">❌ High Outlier</div>
+        <div class="zone-range">Value &gt; Q3 + 1.5×IQR</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔢 Worked Example — Confirmed Cases</div>
+    <p style="font-family:'Source Serif 4',serif;font-size:13px;margin-bottom:16px;">We have 12 monthly observations of "Confirmed Malaria Cases" for a district. Let's find which are outliers.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Observed values (sorted)</div>
+          <div class="step-calc">
+            <div class="eq">Sorted: 12, 18, 22, 25, 28, 31, 34, 38, 42, 48, 55, <span style="color:var(--red);font-weight:700;">210</span></div>
+            <div class="eq" style="margin-top:4px;color:var(--text-muted);font-size:12px;">N = 12 values</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Find Q1 and Q3</div>
+          <div class="step-calc">
+            <div class="eq">Q1 (25th percentile) = average of 3rd and 4th value = (22 + 25) / 2 = <strong>23.5</strong></div>
+            <div class="eq">Q3 (75th percentile) = average of 9th and 10th value = (42 + 48) / 2 = <strong>45.0</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Calculate IQR and fences</div>
+          <div class="step-calc">
+            <div class="eq">IQR = Q3 − Q1 = 45.0 − 23.5 = <strong>21.5</strong></div>
+            <div class="eq">Lower Fence = 23.5 − (1.5 × 21.5) = 23.5 − 32.25 = −8.75 → floored at <strong>0</strong></div>
+            <div class="eq">Upper Fence = 45.0 + (1.5 × 21.5) = 45.0 + 32.25 = <strong>77.25</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Flag outliers</div>
+          <div class="step-calc">
+            <div class="eq">Value 210 &gt; Upper Fence 77.25 → <span style="color:var(--red);">❌ OUTLIER</span></div>
+            <div class="eq" style="margin-top:4px;">All other 11 values are within [0, 77.25] → ✅ Normal</div>
+          </div>
+          <div class="callout danger" style="margin-top:12px;">
+            <div class="callout-icon">❌</div>
+            <div class="callout-body">
+              <strong>210 confirmed cases in one month is extremely suspicious</strong>
+              <p>The typical range for this district is 12–55 cases. 210 is nearly 4× the upper fence. This could be a data entry error (e.g. 21 entered as 210), an accidental aggregation of multiple months, or a genuine outbreak that should be validated with other sources (e.g. IDSR reports, stock consumption data).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Calculate outlier DQA score</div>
+          <div class="step-calc">
+            <div class="eq">Outlier values: 1 &nbsp;|&nbsp; Total values: 12</div>
+            <div class="eq">Score = ((12 − 1) / 12) × 25 = (11/12) × 25 = 0.917 × 25 = <strong>22.9 / 25</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-wrap" id="outlierChart" style="height:360px;"></div>
+  </div>
+</div>
+
+<!-- ============================================================ SCORING ============================================================ -->
+<div id="tab-scoring" class="section">
+  <div class="sec-header">
+    <div class="sec-icon navy">🏆</div>
+    <div class="sec-header-text">
+      <h2>DQA Scoring Methodology</h2>
+      <p>How the four dimension scores combine into a single 0–100 facility score and priority classification</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📐 Combined Score Formula</div>
+    <div class="formula-block">
+      <h4>Total DQA Score (Max 100)</h4>
+      <div class="formula">DQA Score = Score<sub>reporting</sub> + Score<sub>coherency</sub> + Score<sub>indicator</sub> + Score<sub>outlier</sub></div>
+      <div class="formula-note">Each dimension contributes a maximum of 25 points &nbsp;|&nbsp; Total maximum = 100 points</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚦 Priority Classification</div>
+    <div class="card-grid-3">
+      <div class="dim-card" style="border-color:var(--red);background:var(--red-light);">
+        <h3 style="color:var(--red);">HIGH Priority</h3>
+        <div class="pts" style="color:var(--red);">Score &lt; 75</div>
+        <p>Serious data quality issues. Major problems across multiple dimensions. Facility requires urgent intervention, data cleaning, and retraining.</p>
+      </div>
+      <div class="dim-card" style="border-color:var(--gold);background:#fff8e6;">
+        <h3 style="color:var(--gold);">MEDIUM Priority</h3>
+        <div class="pts" style="color:var(--gold);">75 – 89</div>
+        <p>Moderate data quality. Some issues present but manageable. Facility needs targeted follow-up and monitoring.</p>
+      </div>
+      <div class="dim-card" style="border-color:var(--green);background:var(--green-light);">
+        <h3 style="color:var(--green);">LOW Priority</h3>
+        <div class="pts" style="color:var(--green);">≥ 90</div>
+        <p>Good data quality. Minor or no issues detected. Facility data can be used with confidence in analysis.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Score Visualization Examples</div>
+    <div class="card-grid-3">
+      <div class="score-meter">
+        <div class="score-val" style="color:var(--green);">93.4</div>
+        <div class="score-label">/ 100 — Koidu Gov. Hospital</div>
+        <div class="score-bar-wrap">
+          <div class="score-bar-bg"><div class="score-bar-fill" style="width:93.4%;background:var(--green);"><span>93.4</span></div></div>
+        </div>
+        <div class="priority-badge priority-low">LOW PRIORITY</div>
+        <div style="margin-top:12px;font-size:12px;font-family:'Source Serif 4',serif;color:var(--text-muted);">Reporting: 24.2 | Coherency: 23.5 | Indicator: 23.8 | Outlier: 21.9</div>
+      </div>
+      <div class="score-meter">
+        <div class="score-val" style="color:var(--gold);">81.2</div>
+        <div class="score-label">/ 100 — Makeni Regional Hospital</div>
+        <div class="score-bar-wrap">
+          <div class="score-bar-bg"><div class="score-bar-fill" style="width:81.2%;background:var(--gold);"><span>81.2</span></div></div>
+        </div>
+        <div class="priority-badge priority-medium">MEDIUM PRIORITY</div>
+        <div style="margin-top:12px;font-size:12px;font-family:'Source Serif 4',serif;color:var(--text-muted);">Reporting: 22.5 | Coherency: 18.4 | Indicator: 21.3 | Outlier: 19.0</div>
+      </div>
+      <div class="score-meter">
+        <div class="score-val" style="color:var(--red);">58.7</div>
+        <div class="score-label">/ 100 — Kailahun District Hospital</div>
+        <div class="score-bar-wrap">
+          <div class="score-bar-bg"><div class="score-bar-fill" style="width:58.7%;background:var(--red);"><span>58.7</span></div></div>
+        </div>
+        <div class="priority-badge priority-high">HIGH PRIORITY</div>
+        <div style="margin-top:12px;font-size:12px;font-family:'Source Serif 4',serif;color:var(--text-muted);">Reporting: 12.5 | Coherency: 15.2 | Indicator: 18.0 | Outlier: 13.0</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ SCENARIOS ============================================================ -->
+<div id="tab-scenarios" class="section">
+  <div class="sec-header">
+    <div class="sec-icon navy">📋</div>
+    <div class="sec-header-text">
+      <h2>Worked Case Scenarios</h2>
+      <p>Two complete end-to-end DQA calculations for real-world-style health facilities</p>
+    </div>
+  </div>
+
+  <div class="scenario-tabs">
+    <div class="scenario-tab active" onclick="switchScenario(1)">Scenario 1: Well-Performing Facility</div>
+    <div class="scenario-tab" onclick="switchScenario(2)">Scenario 2: Poorly-Performing Facility</div>
+  </div>
+
+  <!-- SCENARIO 1 -->
+  <div id="scenario-1" class="scenario-content active">
+    <div class="callout success">
+      <div class="callout-icon">🏥</div>
+      <div class="callout-body">
+        <strong>Scenario 1: Koidu Government Hospital, Kono District</strong>
+        <p>A busy district hospital in Eastern Sierra Leone. 3 years of data (2021–2023), 12 months per year. We analyse 4 variables: Suspected, Tested, Confirmed, Treated.</p>
+      </div>
+    </div>
+
+    <!-- Dimension 1 -->
+    <div class="dim-section">
+      <div class="dim-header" onclick="toggleDim(this)">
+        <h3>① REPORTING RATE</h3>
+        <span class="pts-chip">Max 25 pts</span>
+      </div>
+      <div class="dim-body">
+        <table class="concept-table">
+          <thead><tr><th style="text-align:left">Year</th><th>Expected Months</th><th>Months Reported</th><th>Reporting Rate</th></tr></thead>
+          <tbody>
+            <tr class="good"><td class="label">2021</td><td>12</td><td>12</td><td>100%</td></tr>
+            <tr class="good"><td class="label">2022</td><td>12</td><td>11</td><td>91.7%</td></tr>
+            <tr class="good"><td class="label">2023</td><td>12</td><td>12</td><td>100%</td></tr>
+            <tr class="total-row"><td class="label">TOTAL</td><td>36</td><td>35</td><td>97.2%</td></tr>
+          </tbody>
+        </table>
+        <div class="step-calc" style="margin-top:14px;">
+          <div class="eq">Score<sub>reporting</sub> = (35 / 36) × 25 = 0.972 × 25 = <strong>24.3 / 25</strong></div>
+        </div>
+        <div class="callout success" style="margin-top:12px;">
+          <div class="callout-icon">✅</div>
+          <div class="callout-body"><strong>Excellent reporting</strong><p>Only 1 month missing (Jul-2022 — likely due to supply disruption). 97.2% completeness is well above the 80% acceptability threshold.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dimension 2 -->
+    <div class="dim-section">
+      <div class="dim-header d2" onclick="toggleDim(this)">
+        <h3>② COHERENCY</h3>
+        <span class="pts-chip">Max 25 pts</span>
+      </div>
+      <div class="dim-body d2">
+        <p style="font-family:'Source Serif 4',serif;font-size:13px;margin-bottom:14px;">Testing 3 rules across 35 reported months = 105 total checks.</p>
+        <table class="concept-table">
+          <thead><tr><th style="text-align:left">Rule</th><th>Total Checks</th><th>Failures</th><th>Pass Rate</th></tr></thead>
+          <tbody>
+            <tr class="good"><td class="label">R1: Confirmed ≤ Tested</td><td>35</td><td>1</td><td>97.1%</td></tr>
+            <tr class="good"><td class="label">R2: Confirmed ≤ Suspected</td><td>35</td><td>0</td><td>100%</td></tr>
+            <tr class="good"><td class="label">R3: Tested ≤ Suspected</td><td>35</td><td>2</td><td>94.3%</td></tr>
+            <tr class="total-row"><td class="label">TOTAL</td><td>105</td><td>3</td><td>97.1%</td></tr>
+          </tbody>
+        </table>
+        <div class="step-calc" style="margin-top:14px;">
+          <div class="eq">Passes = 105 − 3 = 102</div>
+          <div class="eq">Score<sub>coherency</sub> = (102 / 105) × 25 = 0.971 × 25 = <strong>24.3 / 25</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dimension 3 -->
+    <div class="dim-section">
+      <div class="dim-header d3" onclick="toggleDim(this)">
+        <h3>③ INDICATOR CONSISTENCY</h3>
+        <span class="pts-chip">Max 25 pts</span>
+      </div>
+      <div class="dim-body d3">
+        <p style="font-family:'Source Serif 4',serif;font-size:13px;margin-bottom:14px;">4 variables × 35 months = 140 total cells.</p>
+        <table class="concept-table">
+          <thead><tr><th style="text-align:left">Issue Type</th><th>Count</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td class="label">Missing values</td><td>2</td><td>Suspected & Tested missing in Jul-2022</td></tr>
+            <tr><td class="label">Inappropriate values</td><td>0</td><td>No negative or non-numeric values</td></tr>
+            <tr><td class="label">Unexpected zeros</td><td>1</td><td>Treated = 0 in Feb-2021 (active month)</td></tr>
+            <tr class="total-row"><td class="label">TOTAL ISSUES</td><td>3</td><td>137 / 140 cells are valid</td></tr>
+          </tbody>
+        </table>
+        <div class="step-calc" style="margin-top:14px;">
+          <div class="eq">Score<sub>indicator</sub> = ((140 − 3) / 140) × 25 = (137/140) × 25 = 0.979 × 25 = <strong>24.5 / 25</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dimension 4 -->
+    <div class="dim-section">
+      <div class="dim-header d4" onclick="toggleDim(this)">
+        <h3>④ OUTLIER DETECTION</h3>
+        <span class="pts-chip">Max 25 pts</span>
+      </div>
+      <div class="dim-body d4">
+        <p style="font-family:'Source Serif 4',serif;font-size:13px;margin-bottom:14px;">IQR analysis on Confirmed Cases across 35 months.</p>
+        <table class="concept-table">
+          <thead><tr><th>Statistic</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Q1 (25th percentile)</td><td>48</td></tr>
+            <tr><td>Q3 (75th percentile)</td><td>112</td></tr>
+            <tr><td>IQR = Q3 − Q1</td><td>64</td></tr>
+            <tr><td>Lower Fence = Q1 − 1.5×IQR</td><td>48 − 96 = −48 → floor at 0</td></tr>
+            <tr><td>Upper Fence = Q3 + 1.5×IQR</td><td>112 + 96 = <strong>208</strong></td></tr>
+            <tr class="bad"><td>Outlier values detected</td><td>1 (Mar-2022: Confirmed = 315)</td></tr>
+          </tbody>
+        </table>
+        <div class="step-calc" style="margin-top:14px;">
+          <div class="eq">Outliers across all 4 variables: 2 total (out of 140 values)</div>
+          <div class="eq">Score<sub>outlier</sub> = ((140 − 2) / 140) × 25 = (138/140) × 25 = 0.986 × 25 = <strong>24.6 / 25</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final Score -->
+    <div class="card" style="border:3px solid var(--green);">
+      <div class="card-title" style="color:var(--green);">🏆 FINAL DQA SCORE — Koidu Government Hospital</div>
+      <div class="card-grid-4" style="margin-bottom:20px;">
+        <div class="mini-stat"><div class="val" style="color:var(--navy);">24.3</div><div class="lbl">Reporting</div><div class="sub">out of 25</div></div>
+        <div class="mini-stat"><div class="val" style="color:var(--green);">24.3</div><div class="lbl">Coherency</div><div class="sub">out of 25</div></div>
+        <div class="mini-stat"><div class="val" style="color:var(--gold);">24.5</div><div class="lbl">Indicators</div><div class="sub">out of 25</div></div>
+        <div class="mini-stat"><div class="val" style="color:var(--red);">24.6</div><div class="lbl">Outliers</div><div class="sub">out of 25</div></div>
+      </div>
+      <div class="score-meter" style="max-width:400px;margin:0 auto;">
+        <div class="score-val" style="color:var(--green);">97.7</div>
+        <div class="score-label">/ 100 — Total DQA Score</div>
+        <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:97.7%;background:var(--green);"><span>97.7</span></div></div></div>
+        <div class="priority-badge priority-low">✅ LOW PRIORITY — HIGH QUALITY DATA</div>
+      </div>
+      <div class="step-calc" style="margin-top:20px;">
+        <div class="eq">Total = 24.3 + 24.3 + 24.5 + 24.6 = <strong>97.7 / 100</strong></div>
+      </div>
+    </div>
+    <div class="chart-wrap" id="scenario1Chart" style="height:350px;"></div>
+  </div>
+
+  <!-- SCENARIO 2 -->
+  <div id="scenario-2" class="scenario-content">
+    <div class="callout danger">
+      <div class="callout-icon">🏥</div>
+      <div class="callout-body">
+        <strong>Scenario 2: Kailahun District Hospital, Kailahun District</strong>
+        <p>A district hospital with persistent data quality challenges. Same 3-year period (2021–2023), 12 months per year, 4 variables analysed.</p>
+      </div>
+    </div>
+
+    <!-- Dimension 1 -->
+    <div class="dim-section">
+      <div class="dim-header" onclick="toggleDim(this)">
+        <h3>① REPORTING RATE</h3>
+        <span class="pts-chip">Max 25 pts</span>
+      </div>
+      <div class="dim-body">
+        <table class="concept-table">
+          <thead><tr><th style="text-align:left">Year</th><th>Expected Months</th><th>Months Reported</th><th>Reporting Rate</th></tr></thead>
+          <tbody>
+            <tr class="highlight"><td class="label">2021</td><td>12</td><td>8</td><td>66.7%</td></tr>
+            <tr class="bad"><td class="label">2022</td><td>12</td><td>5</td><td>41.7%</td></tr>
+            <tr class="highlight"><td class="label">2023</td><td>12</td><td>9</td><td>75.0%</td></tr>
+            <tr class="total-row"><td class="label">TOTAL</td><td>36</td><td>22</td><td>61.1%</td></tr>
+          </tbody>
+        </table>
+        <div class="step-calc" style="margin-top:14px;">
+          <div class="eq">Score<sub>reporting</sub> = (22 / 36) × 25 = 0.611 × 25 = <strong>15.3 / 25</strong></div>
+        </div>
+        <div class="callout danger" style="margin-top:12px;">
+          <div class="callout-icon">❌</div>
+          <div class="callout-body"><strong>Critical: 14 months of data completely missing</strong><p>2022 was particularly bad — only 5 of 12 months reported. The entire rainy season (Jul–Oct 2022) appears to have no data. This could mask a malaria peak. Requires investigation of facility registers.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dimension 2 -->
+    <div class="dim-section">
+      <div class="dim-header d2" onclick="toggleDim(this)">
+        <h3>② COHERENCY</h3>
+        <span class="pts-chip">Max 25 pts</span>
+      </div>
+      <div class="dim-body d2">
+        <p style="font-family:'Source Serif 4',serif;font-size:13px;margin-bottom:14px;">Only 22 months were reported. 3 rules × 22 rows = 66 total checks.</p>
+        <table class="concept-table">
+          <thead><tr><th style="text-align:left">Rule</th><th>Total Checks</th><th>Failures</th><th>Pass Rate</th></tr></thead>
+          <tbody>
+            <tr class="bad"><td class="label">R1: Confirmed ≤ Tested</td><td>22</td><td>7</td><td>68.2%</td></tr>
+            <tr class="highlight"><td class="label">R2: Confirmed ≤ Suspected</td><td>22</td><td>3</td><td>86.4%</td></tr>
+            <tr class="bad"><td class="label">R3: Tested ≤ Suspected</td><td>22</td><td>6</td><td>72.7%</td></tr>
+            <tr class="total-row"><td class="label">TOTAL</td><td>66</td><td>16</td><td>75.8%</td></tr>
+          </tbody>
+        </table>
+        <div class="step-calc" style="margin-top:14px;">
+          <div class="eq">Passes = 66 − 16 = 50</div>
+          <div class="eq">Score<sub>coherency</sub> = (50 / 66) × 25 = 0.758 × 25 = <strong>18.9 / 25</strong></div>
+        </div>
+        <div class="callout danger" style="margin-top:12px;">
+          <div class="callout-icon">❌</div>
+          <div class="callout-body"><strong>Systematic coherency failures in Rule 1</strong><p>7 of 22 months show Confirmed &gt; Tested. This is not random — it appears the "Confirmed" column may be recording total RDT-positive patients from a different catchment area or time window than "Tested". This is a systemic recording issue.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dimension 3 -->
+    <div class="dim-section">
+      <div class="dim-header d3" onclick="toggleDim(this)">
+        <h3>③ INDICATOR CONSISTENCY</h3>
+        <span class="pts-chip">Max 25 pts</span>
+      </div>
+      <div class="dim-body d3">
+        <p style="font-family:'Source Serif 4',serif;font-size:13px;margin-bottom:14px;">4 variables × 22 reported months = 88 total cells.</p>
+        <table class="concept-table">
+          <thead><tr><th style="text-align:left">Issue Type</th><th>Count</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr class="bad"><td class="label">Missing values</td><td>8</td><td>Scattered blanks in Tested and Treated columns</td></tr>
+            <tr class="highlight"><td class="label">Inappropriate values</td><td>3</td><td>Two negative Confirmed values; one text "N/A" in Tested</td></tr>
+            <tr class="bad"><td class="label">Unexpected zeros</td><td>5</td><td>Zero confirmed cases in 5 active months (facility was still treating)</td></tr>
+            <tr class="total-row"><td class="label">TOTAL ISSUES</td><td>16</td><td>72 / 88 cells are valid</td></tr>
+          </tbody>
+        </table>
+        <div class="step-calc" style="margin-top:14px;">
+          <div class="eq">Score<sub>indicator</sub> = ((88 − 16) / 88) × 25 = (72/88) × 25 = 0.818 × 25 = <strong>20.5 / 25</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dimension 4 -->
+    <div class="dim-section">
+      <div class="dim-header d4" onclick="toggleDim(this)">
+        <h3>④ OUTLIER DETECTION</h3>
+        <span class="pts-chip">Max 25 pts</span>
+      </div>
+      <div class="dim-body d4">
+        <p style="font-family:'Source Serif 4',serif;font-size:13px;margin-bottom:14px;">IQR analysis on all valid values across 4 variables, 22 months.</p>
+        <table class="concept-table">
+          <thead><tr><th style="text-align:left">Variable</th><th>Q1</th><th>Q3</th><th>IQR</th><th>Upper Fence</th><th>Outliers Found</th></tr></thead>
+          <tbody>
+            <tr class="bad"><td class="label">Suspected</td><td>40</td><td>95</td><td>55</td><td>177.5</td><td>3 values (220, 310, 445)</td></tr>
+            <tr><td class="label">Tested</td><td>35</td><td>80</td><td>45</td><td>147.5</td><td>0</td></tr>
+            <tr class="highlight"><td class="label">Confirmed</td><td>18</td><td>55</td><td>37</td><td>110.5</td><td>2 values (180, 142)</td></tr>
+            <tr><td class="label">Treated</td><td>15</td><td>50</td><td>35</td><td>102.5</td><td>0</td></tr>
+            <tr class="total-row"><td class="label">TOTAL</td><td colspan="4">88 valid values checked</td><td>5 outliers</td></tr>
+          </tbody>
+        </table>
+        <div class="step-calc" style="margin-top:14px;">
+          <div class="eq">Score<sub>outlier</sub> = ((88 − 5) / 88) × 25 = (83/88) × 25 = 0.943 × 25 = <strong>23.6 / 25</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final Score -->
+    <div class="card" style="border:3px solid var(--red);">
+      <div class="card-title" style="color:var(--red);">🚨 FINAL DQA SCORE — Kailahun District Hospital</div>
+      <div class="card-grid-4" style="margin-bottom:20px;">
+        <div class="mini-stat"><div class="val" style="color:var(--red);">15.3</div><div class="lbl">Reporting</div><div class="sub">out of 25</div></div>
+        <div class="mini-stat"><div class="val" style="color:var(--gold);">18.9</div><div class="lbl">Coherency</div><div class="sub">out of 25</div></div>
+        <div class="mini-stat"><div class="val" style="color:var(--gold);">20.5</div><div class="lbl">Indicators</div><div class="sub">out of 25</div></div>
+        <div class="mini-stat"><div class="val" style="color:var(--green);">23.6</div><div class="lbl">Outliers</div><div class="sub">out of 25</div></div>
+      </div>
+      <div class="score-meter" style="max-width:400px;margin:0 auto;">
+        <div class="score-val" style="color:var(--red);">78.3</div>
+        <div class="score-label">/ 100 — Total DQA Score</div>
+        <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:78.3%;background:var(--gold);"><span>78.3</span></div></div></div>
+        <div class="priority-badge priority-medium">⚠️ MEDIUM PRIORITY — NEEDS ATTENTION</div>
+      </div>
+      <div class="step-calc" style="margin-top:20px;">
+        <div class="eq">Total = 15.3 + 18.9 + 20.5 + 23.6 = <strong>78.3 / 100</strong></div>
+      </div>
+      <div class="callout warning" style="margin-top:16px;">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+          <strong>Recommended Actions for Kailahun</strong>
+          <p>1. <strong>Trace the 14 missing months</strong> — retrieve paper registers and conduct retrospective data entry. 2. <strong>Investigate Rule 1 failures</strong> — interview data clerk to understand how Confirmed and Tested are being recorded. 3. <strong>Validate the 5 outliers</strong> — check stock consumption records to verify whether 220–445 suspected cases in a month is plausible.</p>
+        </div>
+      </div>
+    </div>
+    <div class="chart-wrap" id="scenario2Chart" style="height:350px;"></div>
+  </div>
+
+</div><!-- end scenarios section -->
+
+</div><!-- end main -->
+
+<div class="page-footer">
+  <strong>Informatics Consultancy Firm — Sierra Leone (ICF-SL)</strong><br>
+  DQA Concepts & Mathematics Guide &nbsp;|&nbsp; National Malaria Control Programme (NMCP) &nbsp;|&nbsp; <em>Driving Data-Driven Solutions for Health and Development</em>
+</div>
+
+<script>
+// TAB SWITCHING
+function switchTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  // Lazy render charts
+  if (id === 'reporting') renderReportingChart();
+  if (id === 'coherency') renderCoherencyChart();
+  if (id === 'outliers') renderOutlierChart();
+  if (id === 'scenarios') { renderScenario1Chart(); renderScenario2Chart(); }
+}
+
+function switchScenario(n) {
+  document.querySelectorAll('.scenario-content').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.scenario-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('scenario-' + n).classList.add('active');
+  document.querySelectorAll('.scenario-tab')[n-1].classList.add('active');
+  if (n === 1) setTimeout(renderScenario1Chart, 100);
+  if (n === 2) setTimeout(renderScenario2Chart, 100);
+}
+
+function toggleDim(header) {
+  const body = header.nextElementSibling;
+  body.style.display = body.style.display === 'none' ? 'block' : 'none';
+}
+
+// CHARTS
+function renderReportingChart() {
+  const facilities = ['Koidu Gov. Hospital', 'Makeni Regional', 'Boajibu CHC', 'Kailahun District', 'Pujehun CHC'];
+  const rates = [100, 94.4, 77.8, 50.0, 91.7];
+  const colors = rates.map(r => r >= 90 ? '#1a7a4a' : r >= 75 ? '#e8a020' : '#c0392b');
+  Plotly.newPlot('reportingChart', [{
+    type: 'bar', x: facilities, y: rates,
+    marker: { color: colors },
+    text: rates.map(r => r.toFixed(1) + '%'),
+    textposition: 'outside'
+  }, {
+    type: 'scatter', x: facilities, y: [80,80,80,80,80],
+    mode: 'lines', name: '80% Threshold',
+    line: { color: '#c0392b', dash: 'dash', width: 2 }
+  }], {
+    title: { text: 'Reporting Rate by Facility (%)', font: { family: 'Oswald', size: 16, color: '#004080' } },
+    yaxis: { title: 'Reporting Rate (%)', range: [0, 115] },
+    xaxis: { tickfont: { size: 11 } },
+    legend: { orientation: 'h', y: -0.2 },
+    margin: { t: 50, b: 80, l: 60, r: 20 },
+    plot_bgcolor: '#fff', paper_bgcolor: '#fff'
+  }, { responsive: true });
+}
+
+function renderCoherencyChart() {
+  Plotly.newPlot('coherencyChart', [{
+    type: 'bar',
+    x: ['R1: Conf≤Tested', 'R2: Conf≤Suspected', 'R3: Tested≤Suspected'],
+    y: [5, 6, 4],
+    name: 'Failures',
+    marker: { color: '#c0392b' }
+  }, {
+    type: 'bar',
+    x: ['R1: Conf≤Tested', 'R2: Conf≤Suspected', 'R3: Tested≤Suspected'],
+    y: [1, 0, 2],
+    name: 'Passes',
+    marker: { color: '#1a7a4a' }
+  }], {
+    barmode: 'group',
+    title: { text: 'Coherency Checks: Pass vs Fail by Rule', font: { family: 'Oswald', size: 16, color: '#004080' } },
+    yaxis: { title: 'Count' },
+    legend: { orientation: 'h', y: -0.2 },
+    margin: { t: 50, b: 80, l: 60, r: 20 },
+    plot_bgcolor: '#fff', paper_bgcolor: '#fff'
+  }, { responsive: true });
+}
+
+function renderOutlierChart() {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const vals = [12, 18, 22, 25, 28, 31, 34, 38, 42, 48, 55, 210];
+  const colors = vals.map(v => v > 77.25 ? '#c0392b' : '#004080');
+  const sizes = vals.map(v => v > 77.25 ? 14 : 8);
+  Plotly.newPlot('outlierChart', [{
+    type: 'scatter', mode: 'markers+lines',
+    x: months, y: vals,
+    marker: { color: colors, size: sizes },
+    line: { color: '#004080', width: 1.5 },
+    name: 'Confirmed Cases'
+  }, {
+    type: 'scatter', mode: 'lines',
+    x: months, y: Array(12).fill(77.25),
+    line: { color: '#c0392b', dash: 'dot', width: 2 },
+    name: 'Upper Fence (77.25)'
+  }, {
+    type: 'scatter', mode: 'lines',
+    x: months, y: Array(12).fill(23.5),
+    line: { color: '#1a7a4a', dash: 'dot', width: 2 },
+    name: 'Q1 (23.5)'
+  }, {
+    type: 'scatter', mode: 'lines',
+    x: months, y: Array(12).fill(45.0),
+    line: { color: '#e8a020', dash: 'dot', width: 2 },
+    name: 'Q3 (45.0)'
+  }], {
+    title: { text: 'Confirmed Cases with IQR Bounds — Outlier Detection', font: { family: 'Oswald', size: 16, color: '#004080' } },
+    yaxis: { title: 'Confirmed Cases' },
+    xaxis: { title: 'Month' },
+    annotations: [{ x: 'Dec', y: 210, text: '⚠️ OUTLIER (210)', showarrow: true, arrowhead: 2, arrowcolor: '#c0392b', font: { color: '#c0392b', size: 12, family: 'Oswald' } }],
+    legend: { orientation: 'h', y: -0.25 },
+    margin: { t: 50, b: 100, l: 60, r: 20 },
+    plot_bgcolor: '#fff', paper_bgcolor: '#fff'
+  }, { responsive: true });
+}
+
+function renderScenario1Chart() {
+  const dims = ['Reporting', 'Coherency', 'Indicators', 'Outliers'];
+  const scores = [24.3, 24.3, 24.5, 24.6];
+  const max = [25, 25, 25, 25];
+  Plotly.newPlot('scenario1Chart', [{
+    type: 'bar', x: dims, y: scores, name: 'Score',
+    marker: { color: ['#004080', '#1a7a4a', '#e8a020', '#c0392b'] },
+    text: scores.map(s => s.toFixed(1) + ' / 25'), textposition: 'outside'
+  }, {
+    type: 'bar', x: dims, y: max.map((m,i) => m - scores[i]),
+    name: 'Remaining', marker: { color: ['rgba(0,64,128,0.15)', 'rgba(26,122,74,0.15)', 'rgba(232,160,32,0.15)', 'rgba(192,57,43,0.15)'] }
+  }], {
+    barmode: 'stack',
+    title: { text: 'Koidu Gov. Hospital — DQA Score by Dimension (Total: 97.7/100)', font: { family: 'Oswald', size: 15, color: '#004080' } },
+    yaxis: { title: 'Score', range: [0, 28] },
+    legend: { orientation: 'h', y: -0.2 },
+    margin: { t: 50, b: 80, l: 60, r: 20 },
+    plot_bgcolor: '#fff', paper_bgcolor: '#fff'
+  }, { responsive: true });
+}
+
+function renderScenario2Chart() {
+  const dims = ['Reporting', 'Coherency', 'Indicators', 'Outliers'];
+  const scores = [15.3, 18.9, 20.5, 23.6];
+  const max = [25, 25, 25, 25];
+  Plotly.newPlot('scenario2Chart', [{
+    type: 'bar', x: dims, y: scores, name: 'Score',
+    marker: { color: ['#c0392b', '#e8a020', '#e8a020', '#1a7a4a'] },
+    text: scores.map(s => s.toFixed(1) + ' / 25'), textposition: 'outside'
+  }, {
+    type: 'bar', x: dims, y: max.map((m,i) => m - scores[i]),
+    name: 'Remaining', marker: { color: ['rgba(192,57,43,0.15)', 'rgba(232,160,32,0.15)', 'rgba(232,160,32,0.15)', 'rgba(26,122,74,0.15)'] }
+  }], {
+    barmode: 'stack',
+    title: { text: 'Kailahun District Hospital — DQA Score by Dimension (Total: 78.3/100)', font: { family: 'Oswald', size: 15, color: '#004080' } },
+    yaxis: { title: 'Score', range: [0, 28] },
+    legend: { orientation: 'h', y: -0.2 },
+    margin: { t: 50, b: 80, l: 60, r: 20 },
+    plot_bgcolor: '#fff', paper_bgcolor: '#fff'
+  }, { responsive: true });
+}
+</script>
+</body>
+</html>
